@@ -2,6 +2,23 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 
+getLimeBikeData = function(data) {
+  baseUrl = "https://web-production.lime.bike/api/public/v1/views/bikes"
+  query = paste0("?map_center_latitude=", data[1], "&map_center_longitude=", data[2], "&user_latitude=", data[1], "&user_longitude=", data[2])
+  result = GET(paste0(baseUrl, query))
+  content = content(result, "text")
+  data = fromJSON(content)[1]
+  return(data)
+}
+
+getBikeRackData = function(){
+  url = "https://data.seattle.gov/api/views/stpx-rghv/rows.csv"
+  result = GET(url)
+  content = content(result, "text")
+  data = read.csv(text = content)
+  return(data)
+}
+
 getBikeData = function(){
   locations = list(c("47.652413", "-122.309003"),
                    c("47.655842", "-122.309959"),
@@ -14,23 +31,21 @@ getBikeData = function(){
                    c("47.654012", "-122.317239"),
                    c("47.658767", "-122.313999"))
   
-  getLimeBikeData = function(data) {
-    baseUrl = "https://web-production.lime.bike/api/public/v1/views/bikes"
-    query = paste0("?map_center_latitude=", data[1], "&map_center_longitude=", data[2], "&user_latitude=", data[1], "&user_longitude=", data[2])
-    result = GET(paste0(baseUrl, query))
-    content = content(result, "text")
-    data = fromJSON(content)[1]
-    return(data)
-  }
-  
   data = sapply(locations, getLimeBikeData)
   
-  bikes = data[[1]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude)
+  bikes = data[[1]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude, last_activity_at)
   for(num in 2:length(data)){
-    bikes = union(bikes, data[[num]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude) )
+    bikes = union(bikes, data[[num]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude, last_activity_at) )
   }
   
   return(bikes)
 }
 
-getBikeData()
+getBikeAndRackData = function(){
+  bikes = getBikeData() %>% select(latitude, longitude) %>% mutate(type = "bike")
+  racks = getBikeRackData() %>% select(latitude = LATITUDE, longitude = LONGITUDE) %>% mutate(type = "rack")
+  unifiedData = union(bikes, racks)
+  return(unifiedData)
+}
+
+
