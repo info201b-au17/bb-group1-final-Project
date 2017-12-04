@@ -2,13 +2,19 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 
-getLimeBikeData = function(data) {
+getLimeBikeDataInternal = function(data) {
   baseUrl = "https://web-production.lime.bike/api/public/v1/views/bikes"
   query = paste0("?map_center_latitude=", data[1], "&map_center_longitude=", data[2], "&user_latitude=", data[1], "&user_longitude=", data[2])
   result = GET(paste0(baseUrl, query))
   content = content(result, "text")
   data = fromJSON(content)[1]
   return(data)
+}
+
+getLimeBikeData = function (latLongPair){
+  raw = getLimeBikeDataInternal(latLongPair)
+  formatted = raw[["data"]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude)
+  return(formatted)
 }
 
 getBikeRackData = function(){
@@ -31,7 +37,7 @@ getBikeData = function(){
                    c("47.654012", "-122.317239"),
                    c("47.658767", "-122.313999"))
   
-  data = sapply(locations, getLimeBikeData)
+  data = sapply(locations, getLimeBikeDataInternal)
   
   bikes = data[[1]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude, last_activity_at)
   for(num in 2:length(data)){
@@ -47,5 +53,3 @@ getBikeAndRackData = function(){
   unifiedData = union(bikes, racks)
   return(unifiedData)
 }
-
-
