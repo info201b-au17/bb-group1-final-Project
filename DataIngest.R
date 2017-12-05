@@ -64,3 +64,13 @@ getBikeAndRackData = function(){
   unifiedData = union(bikes, racks)
   return(unifiedData)
 }
+
+#SHIV'S CODE
+getDateandTime() = function() {
+  bikeTime = getBikeData() %>% select(latitude, longitude, last_activity_at) 
+  date_time <- bikeTime %>% 
+    separate(last_activity_at, into = c("date", "time"), sep = "\\T", remove = TRUE)
+  date_time <- date_time %>% 
+    separate(time, into = c("hour", "minutes"), sep = "\\:", remove = TRUE) 
+  return(date_time)
+}
