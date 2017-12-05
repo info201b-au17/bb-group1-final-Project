@@ -26,7 +26,7 @@ getBikeRackData = function(){
 }
 
 getBikeData = function(){
-  locations = list(c("47.652413", "-122.309003"),
+  uwLocations = list(c("47.652413", "-122.309003"),
                    c("47.655842", "-122.309959"),
                    c("47.660077", "-122.311011"),
                    c("47.658293", "-122.305126"),
@@ -37,7 +37,18 @@ getBikeData = function(){
                    c("47.654012", "-122.317239"),
                    c("47.658767", "-122.313999"))
   
-  data = sapply(locations, getLimeBikeDataInternal)
+  downtownLocations = list(c("47.614450", "-122.334854"),
+                           c("47.612570", "-122.336785"),
+                           c("47.609915", "-122.334258"),
+                           c("47.607246", "-122.332402"),
+                           c("47.610400", "-122.339580"),
+                           c("47.605503", "-122.330884"),
+                           c("47.603043", "-122.333083"),
+                           c("47.601726", "-122.327692"),
+                           c("47.599722", "-122.329055"),
+                           c("47.598174", "-122.326373"))
+  
+  data = sapply(downtownLocations, getLimeBikeDataInternal)
   
   bikes = data[[1]][["attributes"]][["nearby_locked_bikes"]]$attributes %>% select(latitude, longitude, last_activity_at)
   for(num in 2:length(data)){
