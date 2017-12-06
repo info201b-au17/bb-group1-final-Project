@@ -66,11 +66,14 @@ getBikeAndRackData = function(){
 }
 
 #SHIV'S CODE
-getDateandTime() = function() {
+getDateTime = function() {
   bikeTime = getBikeData() %>% select(latitude, longitude, last_activity_at) 
   date_time <- bikeTime %>% 
     separate(last_activity_at, into = c("date", "time"), sep = "\\T", remove = TRUE)
   date_time <- date_time %>% 
     separate(time, into = c("hour", "minutes"), sep = "\\:", remove = TRUE) 
+  hour <- as.integer(date_time$hour) 
+  date_time <- select(date_time, latitude, longitude)
+  date_time <- mutate(date_time, hour)
   return(date_time)
 }
