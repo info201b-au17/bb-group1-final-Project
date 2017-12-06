@@ -53,7 +53,63 @@ my.server <- shinyServer(function(input, output) {
       theme(legend.text = element_text(size = 12, face = "bold")) +
       theme(plot.title = element_text(size = 20, face = "bold"))
     print(seattle.bikes)
+})
+
+#Question 3 - Riddhi's code
+  #pull data from DataIngest and create concise dataframes
+  Racks.And.Bikes <- getBikeAndRackData()
+  bikes <- Racks.And.Bikes %>% filter(type == "bike")
+  racks <- Racks.And.Bikes %>% filter(type == "rack")
+  seattle.map <- get_map(location = "downtown seattle", zoom = 15, source="stamen", maptype = "toner-lite")
+  
+  #output#1 - returns map with bike & bike rack locations
+  output$BikeRackPlot <- renderPlot({
+    Racks.And.Bikes <- getBikeAndRackData()
+    bikes <- Racks.And.Bikes %>% filter(type == "bike")
+    racks <- Racks.And.Bikes %>% filter(type == "rack")
+    
+    if(length(input$type) == 1){
+      if(input$type == "bike"){
+        seattle.bikes <- ggmap(seattle.map)+geom_point(bikes, 
+                                                       aes(longitude, latitude, col=bikes$type), 
+                                                       alpha=0.6, size=0.7)+
+          labs(title="Downtown Seattle LimeBikes v. Bike Racks", color="Type")
+      }else if(input$type == "rack"){
+        seattle.bikes <- ggmap(seattle.map)+geom_point(racks, 
+                                                       aes(longitude, latitude, col=racks$type), 
+                                                       alpha=0.6, size=0.7)+
+          labs(title="Downtown Seattle LimeBikes v. Bike Racks", color="Type")
+      }
+    }else{
+      seattle.bikes <- ggmap(seattle.map)+geom_point(Racks.And.Bikes, 
+                                                     aes(longitude, latitude, col=Racks.And.Bikes$type), 
+                                                     alpha=0.6, size=0.7)+
+        labs(title="Downtown Seattle LimeBikes v. Bike Racks", color="Type")
+    }
+    return(seattle.bikes)
   })
+  
+  #output#2 - Creating Table with Bike & Bike Rack stats
+  output$BikeRackTable <- renderTable({
+    bikes <- transform(bikes, loc=paste(round(bikes$latitude, digits = 4), ", ", round(bikes$longitude, digits = 4)))
+    num.bikes <- as.numeric(nrow(bikes))
+    
+    racks <- transform(racks, loc=paste(round(racks$latitude, digits = 4), ", ", round(racks$longitude, digits = 4)))
+    num.racks <- as.numeric(nrow(racks))
+    
+    #merge to create column that is shared by racks and bikes 
+    overlap <- merge(bikes, racks, by.x = "loc", by.y = "loc")
+    num.overlap <- as.numeric(nrow(overlap))
+    
+    #get stats
+    Count <- c(num.bikes, num.racks, num.overlap, num.bikes-num.overlap)
+    Type <- c("Bikes", "Racks", "Bikes Parked At Rack", "Bikes Parked Randomly")
+    
+    #make df
+    parked.bikes <- data.frame(Type, Count)
+    return(parked.bikes)
+  })
+  
   
 
 })

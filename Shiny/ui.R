@@ -21,6 +21,7 @@ shinyUI(fluidPage(
         )
       )
     ),
+    
     #Question 2 - shiv's code, tab 2
     tabPanel("Question 2",
           sidebarLayout(
@@ -34,18 +35,27 @@ shinyUI(fluidPage(
             )
           )
     ),
+    
     #Question 3 - Riddhi's code, tab 3
     #I just put this here for a place holder, replace it with whatever
     #you need
     tabPanel("Question 3",
-        sidebarLayout(
-          sidebarPanel(),
-          mainPanel("limeMap")
-          
-        
+             sidebarLayout(
+               sidebarPanel(
+                 checkboxGroupInput(inputId = "type",
+                                    label = "Type:",
+                                    choices = c("bike", "rack"),
+                                    selected = "bike")
+               ),
+               mainPanel(
+                 plotOutput("BikeRackPlot"),
+                 tableOutput("BikeRackTable")
+               )
+             )
         )
-             
+    
+    
     )
  )
-))
+)
 
