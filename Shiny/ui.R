@@ -12,7 +12,7 @@ shinyUI(fluidPage(
           selectInput("building", "Chose a station:", 
                   choices = c("Husky Stadium", "University Street",
                               "Capital Hill","International Station/Chinatown",
-                              "Stadium", "Sodo")),
+                              "Stadium", "Sodo"), selected = "Husky Stadium"),
           helpText("Lime Bikes near this locations")
         ),
         mainPanel(
