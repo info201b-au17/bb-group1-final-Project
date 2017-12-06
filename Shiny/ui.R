@@ -3,40 +3,49 @@ library(shiny)
 
 # Define UI for application
 shinyUI(fluidPage(
-  
-  # Application title
-  titlePanel("Seattle Limebike Data"),
-  
-  # Sidebar
-  sidebarLayout(
-    sidebarPanel(
-
+  navbarPage("My Application",
+    #Shannon's code, tab 1
+    tabPanel("Question 1",
+      titlePanel("Seattle Limebike Data"),
+      sidebarLayout(
+        sidebarPanel(
+          selectInput("building", "Chose a station:", 
+                  choices = c("Husky Stadium", "University Street",
+                              "Capital Hill","International Station/Chinatown",
+                              "Stadium", "Sodo")),
+          helpText("Lime Bikes near this locations")
+        ),
+        mainPanel(
+          leafletOutput("limeMap"),
+          p()
+        )
+      )
     ),
-    
-    #Main panel
-    mainPanel(
-
+    #shiv's code, question 2
+    tabPanel("Question 2",
+          sidebarLayout(
+            sidebarPanel(
+              sliderInput("time",
+                          "Insert Hour:",
+                          00, 23, 00)
+            ),
+            mainPanel(
+              plotOutput("time.plot")
+            )
+          )
+    ),
+    #question 3
+    #I just put this here for a place holder, replace it with whatever
+    #you need
+    tabPanel("Question 3",
+        sidebarLayout(
+          sidebarPanel(),
+          mainPanel("limeMap")
+          
+        
+        )
+             
     )
-  )
+ )
 ))
 
-#SHIV'S CODE
-my.ui <- shinyUI(fluidPage(
-  
-  # Creates a title for the page
-  titlePanel("Last Time Bike was Used"),
-  
-  # Creates two widgets for user input
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("time",
-                  "Insert Hour:",
-                  00, 23, 00)
-    ),
-    
-    # Ouputs the plot to the website.
-    mainPanel(
-      plotOutput("time.plot")
-    )
-  )
-))
