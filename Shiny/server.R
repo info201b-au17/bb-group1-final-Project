@@ -1,4 +1,4 @@
-#SHIV'S CODE 
+#server.R
 library(shiny)
 library(ggplot2)
 library(dplyr)
@@ -9,6 +9,7 @@ library(tidyr)
 
 source("../DataIngest.R")
 
+#Shiv's code
 data_time <- getTime()
 
 my.server <- shinyServer(function(input, output) {
