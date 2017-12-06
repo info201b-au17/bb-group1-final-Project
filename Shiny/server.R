@@ -11,11 +11,12 @@ source("../DataIngest.R")
 
 
 #Question 2 - Shiv's code
-data_time <- getTime()
+
 
 my.server <- shinyServer(function(input, output) {
   #question 2
   output$time.plot <- renderPlot({
+    data_time <- getTime()
     data_time <- data_time %>% 
       select(longitude, latitude, hour) %>%
       filter(hour >= input$time) 
@@ -32,16 +33,15 @@ my.server <- shinyServer(function(input, output) {
 
 #Question 3 - Riddhi's code
   #pull data from DataIngest and create concise dataframes
-  Racks.And.Bikes <- getBikeAndRackData()
-  bikes <- Racks.And.Bikes %>% filter(type == "bike")
-  racks <- Racks.And.Bikes %>% filter(type == "rack")
-  seattle.map <- get_map(location = "downtown seattle", zoom = 15, source="stamen", maptype = "toner-lite")
+  
+
   
   #output#1 - returns map with bike & bike rack locations
   output$BikeRackPlot <- renderPlot({
-    Racks.And.Bikes <- head(getBikeAndRackData())
+    Racks.And.Bikes <- getBikeAndRackData()
     bikes <- Racks.And.Bikes %>% filter(type == "bike")
     racks <- Racks.And.Bikes %>% filter(type == "rack")
+    seattle.map <- get_map(location = "downtown seattle", zoom = 15, source="stamen", maptype = "toner-lite")
     
     if(length(input$type) == 1){
       if(input$type == "bike"){
@@ -88,7 +88,7 @@ my.server <- shinyServer(function(input, output) {
   # 50 bikes to a station
   output$limeMap <- renderLeaflet({
     Names<- c("Husky Stadium", "University Street",
-              "Capital Hill","International Station/Chinatown",
+              "Capitol Hill","International Station/Chinatown",
               "Stadium","Sodo"
     )
     Lat<- c("47.6503", "47.607922", "47.620911",
