@@ -4,7 +4,7 @@ library(shiny)
 # Define UI for application
 shinyUI(fluidPage(
   navbarPage("My Application",
-    #Shannon's code, tab 1
+    #Question 1 - Shannon's code, tab 1
     tabPanel("Question 1",
       titlePanel("Seattle Limebike Data"),
       sidebarLayout(
@@ -21,7 +21,7 @@ shinyUI(fluidPage(
         )
       )
     ),
-    #shiv's code, question 2
+    #Question 2 - shiv's code, tab 2
     tabPanel("Question 2",
           sidebarLayout(
             sidebarPanel(
@@ -34,7 +34,7 @@ shinyUI(fluidPage(
             )
           )
     ),
-    #question 3
+    #Question 3 - Riddhi's code, tab 3
     #I just put this here for a place holder, replace it with whatever
     #you need
     tabPanel("Question 3",
