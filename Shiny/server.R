@@ -14,8 +14,6 @@ source("../DataIngest.R")
 
 
 my.server <- shinyServer(function(input, output) {
-  seattle.map <- get_map(location = "downtown seattle", zoom = 15, source="stamen", maptype = "toner-lite")
-  
   #question 2
   output$time.plot <- renderPlot({
     data_time <- getTime()
@@ -43,6 +41,7 @@ my.server <- shinyServer(function(input, output) {
     Racks.And.Bikes <- getBikeAndRackData()
     bikes <- Racks.And.Bikes %>% filter(type == "bike")
     racks <- Racks.And.Bikes %>% filter(type == "rack")
+    seattle.map <- get_map(location = "downtown seattle", zoom = 15, source="stamen", maptype = "toner-lite")
     
     if(length(input$type) == 1){
       if(input$type == "bike"){
