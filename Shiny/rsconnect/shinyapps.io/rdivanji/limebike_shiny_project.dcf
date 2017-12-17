@@ -5,9 +5,9 @@ account: rdivanji
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 245042
-bundleId: 1118520
+bundleId: 1138886
 url: https://rdivanji.shinyapps.io/limebike_shiny_project/
-when: 1512553932.89814
+when: 1513480598.71431
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .Rapp.history

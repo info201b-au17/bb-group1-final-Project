@@ -1,5 +1,13 @@
 #ui.R
 library(shiny)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(mapproj)
+library(leaflet)
+library(tidyr)
+
+source("../DataIngest.R")
 
 # Define UI for application
 shinyUI(fluidPage(
@@ -45,7 +53,7 @@ shinyUI(fluidPage(
                  checkboxGroupInput(inputId = "type",
                                     label = "Type:",
                                     choices = c("bike", "rack"),
-                                    selected = "bike")
+                                    selected = "rack")
                ),
                mainPanel(
                  plotOutput("BikeRackPlot"),

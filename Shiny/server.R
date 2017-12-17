@@ -65,6 +65,9 @@ my.server <- shinyServer(function(input, output) {
   })
   #output#2 - Creating Table with Bike & Bike Rack stats
   output$BikeRackTable <- renderTable({
+    Racks.And.Bikes <- getBikeAndRackData()
+    bikes <- Racks.And.Bikes %>% filter(type == "bike")
+    racks <- Racks.And.Bikes %>% filter(type == "rack")
     bikes <- transform(bikes, loc=paste(round(bikes$latitude, digits = 4), ", ", round(bikes$longitude, digits = 4)))
     num.bikes <- as.numeric(nrow(bikes))
     
